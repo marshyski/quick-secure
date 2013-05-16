@@ -1,4 +1,4 @@
-ckly secure UNIX/Linux systems#!/bin/bash
+#!/bin/bash
 #
 # Copyright 2013, Timothy Marcinowski (marshyski@gmail.com), USA
 # Web site: https://github.com/marshyski/quick_secure
