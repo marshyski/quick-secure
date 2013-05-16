@@ -1,0 +1,151 @@
+
+================================================================================
+
+  Quick NIX Secure Script - README
+
+================================================================================
+
+  Author:                   Timothy Marcinowski (marshyski@gmail.com)
+  Description:              Quickly secure UNIX/Linux systems
+  Web site:                 https://github.com/marshyski/quick_secure
+  Development start:        May, 2013
+  Support policy:           See section 'Support'
+  Documentation:            See web site and README file
+
+================================================================================
+
+
+[+] Introduction
+[+] Installation
+[+] Supported Systems
+[+] Usage
+[+] Development
+[+] Project Donations
+[+] Thanks
+[+] Support
+
+
+  == Web site contains up-to-date documentation ==
+
+  See https://github.com/marshyski/quick_secure
+
+
+
+[+] Introduction
+-------------------------------
+
+  Quick NIX Secure Script is used to harden and secure basic permissions
+  and ownership on the fly.  This script can be used during boot up, cron,
+  bootstrapping, kickstart, jumpstart and during other system deployments.
+
+  Many times in (prod)uction world prior system admins harden without 
+  automation or towards a baseline. This is to help get to a point
+  of standardization and quickly setting or re-setting permissions.
+
+  Everyone is free to use Quick NIX Secure Script under the conditions of 
+  the GPL v3 license (see LICENSE file).
+  
+  ========================
+   Quick Facts
+  ========================
+   - Name:     Quick NIX Secure Script
+   - Type:     securing, hardening, permission integrity, security mechanism
+   - License:  GPL v3
+   - Language: Bash script
+   - Author:   Timothy Marcinowski
+   - Web site: https://github.com/marshyski/quick_secure
+   - Required permissions: root or equivalent
+   - Other requirements: basic "/bin" "/sbin" "/usr/bin" executables
+   
+
+
+[+] Installation
+-------------------------------
+
+  Quick NIX Secure Script is easy to customize and maintain.  
+  Please review comments and variables in quick_secure.sh.
+
+  - Download bash script quick_secure.sh in /root and 
+    chmod 0700 /root/quick_secure.sh
+    
+  - "-c" argument reviews what's commented out in quick_secure.sh
+    
+  - "-u" argument reviews what's being applied to your current system.
+  
+  - "-f" arugment forces settings without being prompt with "are you sure"
+    question.
+  
+  - Run quick_secure.sh for the first time: /root/quick_secure.sh in CLI
+
+  - Setup quick_secure.sh to run every sunday at 11PM via root's cron: 
+
+    00 23 * * 0 /root/quick_secure.sh -f
+ 
+   
+
+[+] Supported systems
+-------------------------------
+  
+  This tool was tested to work with:
+  Ubuntu 10-13, Fedora 17, RHEL 5-6, CentOS 5-6 and Solaris 10.
+  
+  NOTE: Please feel free to let me know if Quick NIX Secure Script works on a 
+  *NIX operating system not mentioned above.
+
+
+
+[+] Usage
+-------------------------------
+   
+  Switches |       Decription       |               Examples
+  -------------------------------------------------------------------------- 
+    -c     | Review what's commented out in script | username@hostname:~$ /root/quick_secure.sh -c
+    -u     | Review what's being applied to system | username@hostname:~$ /root/quick_secure.sh -u
+    -f     | Force settings, never prompt question | username@hostname:~$ /root/quick_secure.sh -f 
+
+  
+ 
+[+] Development
+-------------------------------
+
+  If you have inputs to improve Quick NIX Secure Script, submit pull request 
+  via GitHub or notify me via email. 
+  You are free to send improvements or inputs for consideration.
+
+
+
+[+] Support
+-------------------------------
+
+  Quick NIX Secure Script is tested on out-of-box *NIX operating systems. The README 
+  should answer most questions and problems. Bugs can be reported by emailing me.
+
+  Commercial support is available under strict conditions and depends on the 
+  request.  For more information email me and describe what kind of service is 
+  requested.
+
+
+
+[+] Project donations
+-------------------------------
+
+  Individuals and companies which use this software for more than ten systems, 
+  should consider the value of this tool. To improve my tools, I rely on 
+  internet sources and a huge amount of time (spare time) investment. Donations 
+  are highly appreciated and will stimulate development.
+  
+
+
+[+] Thanks
+-------------------------------
+
+  Thanks to the community for using and supporting open source software and my 
+  tools in particular. Many comments, bugs/patches, and questions are the key to 
+  success and motivation in developing tools.
+
+
+
+================================================================================
+ Quick NIX Secure Script - Copyright 2013, Timothy Marcinowski - USA
+ https://github.com/marshyski/quick_secure
+
