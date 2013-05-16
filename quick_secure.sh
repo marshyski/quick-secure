@@ -47,7 +47,9 @@ fi
 
 #### SET VARIABLES OF SCRIPT
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/kerberos/sbin:/usr/kerberos/bin"
-PASS_EXPIRE="60" #used to set password expire in days for root
+PASS_EXP="60" #used to set password expire in days 
+PASS_WARN="14" #used to set password warning in days
+PASS_CHANG="1" #used to set how often you can change password in days
 
 
 #### DISCLAIMER
@@ -272,6 +274,8 @@ chmod -f 0755 /var/log
 chmod -f 0750 /var/log/syslog /var/log/audit
 chmod -f 0600 /var/log/lastlog*
 chmod -f 0600 /var/log/cron*
+chmod -f 0600 /var/log/btmp
+chmod -f 0660 /var/log/wtmp
 chmod -f 0444 /etc/profile
 chmod -f 0700 /etc/rc.d/rc.local
 chmod -f 0400 /etc/securetty
@@ -470,11 +474,8 @@ fi
 passwd -l gdm 2>/dev/null
 
 
-#if [[ `which chage 2>/dev/null` != "" ]]; then
-#   chage -M $PASS_EXPIRE root
-#   chage -d 1 root
-#   chage -W 14 root
-#fi
+#### SET PASSWORD SETTINGS FOR ALL ACCOUNTS IN SHADOW
+sed -i 's/0:99999:7/'"$PASS_CHANG:$PASS_EXP:$PASS_WARN"'/' /etc/shadow
 
 
 #### DISABLE FINGERPRINT IN PAM / AUTHCONFIG
