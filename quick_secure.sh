@@ -477,6 +477,8 @@ if [[ `which userdel 2>/dev/null` != "" ]]; then
    userdel -f uucp 2>/dev/null
    userdel -f irc 2>/dev/null
    userdel -f gnats 2>/dev/null
+   userdel -f pcap 2>/dev/null
+   userdel -f netdump 2>/dev/null 
 fi
 
 
