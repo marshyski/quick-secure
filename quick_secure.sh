@@ -10,7 +10,7 @@
 ################################################################################
 #
 # Quick NIX Secure Script is meant to quickly secure UNIX/Linux systems
-# Version 1.0 | 16-MAY-2013 | GNU GENERAL PUBLIC LICENSE Version 3
+# Version 1.0 | 18-MAY-2013 | GNU GENERAL PUBLIC LICENSE Version 3
 #
 ################################################################################
 #                                                   
@@ -429,24 +429,34 @@ fi
 
 #### REMOVE SECURITY RELATED PACKAGES
 if [[ -f /bin/rpm ]]; then
-   rpm -ev tcpdump 2>/dev/null
+   rpm -ev nc 2>/dev/null
+   rpm -ev vsftpd 2>/dev/null
+   rpm -ev ftp 2>/dev/null
    rpm -ev nmap 2>/dev/null
    rpm -ev telnet-server 2>/dev/null
-   rpm -ev --allmatches --nodeps wireless-tools 2>/dev/null
-   rpm -ev vsftpd 2>/dev/null
+   rpm -ev telnet 2>/dev/null
+   rpm -ev rdate 2>/dev/null
+   rpm -ev ntpdate 2>/dev/null
+   rpm -ev tcpdump 2>/dev/null
    rpm -ev vnc-server 2>/dev/null
-   rpm -ev wireshark 2>/dev/null
    rpm -ev tigervnc-server 2>/dev/null
+   rpm -ev wireshark 2>/dev/null
+   rpm -ev --allmatches --nodeps wireless-tools 2>/dev/null
 fi
 
 if [[ `which apt-get 2>/dev/null` != "" ]]; then
-   apt-get autoremove -y netcat-openbsd
-   apt-get autoremove -y ftp
-   apt-get autoremove -y nmap
-   apt-get autoremove -y telnet
-   apt-get autoremove -y rdate
-   apt-get autoremove -y ntpdate
-   apt-get autoremove -y tcpdump
+   apt-get autoremove -y netcat-openbsd 2>/dev/null
+   apt-get autoremove -y vsftpd 2>/dev/null
+   apt-get autoremove -y ftp 2>/dev/null
+   apt-get autoremove -y nmap 2>/dev/null
+   apt-get autoremove -y telnetd 2>/dev/null
+   apt-get autoremove -y telnet 2>/dev/null
+   apt-get autoremove -y rdate 2>/dev/null
+   apt-get autoremove -y ntpdate 2>/dev/null
+   apt-get autoremove -y tcpdump 2>/dev/null
+   apt-get autoremove -y vnc4server 2>/dev/null
+   apt-get autoremove -y vino 2>/dev/null
+   apt-get autoremove -y wireshark 2>/dev/null
 fi
 
 
@@ -458,7 +468,7 @@ if [[ `which userdel 2>/dev/null` != "" ]]; then
    userdel -f tcpdump 2>/dev/null
    userdel -f shutdown 2>/dev/null
    userdel -f halt 2>/dev/null
-#   userdel -f nobody 2>/dev/null
+#   userdel -f nobody 2>/dev/null 
 #   userdel -f nfsnobody 2>/dev/null
    userdel -f sync 2>/dev/null
    userdel -f ftp 2>/dev/null
