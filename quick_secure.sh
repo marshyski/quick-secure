@@ -319,7 +319,7 @@ umask 077 /etc/*
 chmod -f 0755 /etc
 chmod -f 0644 /usr/share/man/man1/*
 chmod -f 0600 /etc/yum.repos.d/*
-
+chmod -f 0640 /etc/fstab
 
 #### CLAMAV SECURITY
 if [[ -d /usr/local/share/clamav ]]; then
