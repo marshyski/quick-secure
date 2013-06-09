@@ -302,6 +302,7 @@ chmod -f 0700 /bin/traceroute
 chown -f root:root /bin/traceroute
 chmod -f 0700 /usr/bin/traceroute6*
 chown -f root:root /usr/bin/traceroute6
+chmod -f 0700 /bin/tcptraceroute
 chmod -f 0700 /sbin/iptunnel
 chmod -f 0700 /usr/bin/tracpath*	
 chmod -f 0644 /dev/audio
