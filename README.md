@@ -1,13 +1,10 @@
 Quick NIX Secure Script
 ==============
-Quick NIX Secure Script is used to **harden** and **secure** basic permissions and ownership **on the fly**.  This script can be used during boot up, cron,
-bootstrapping, kickstart, jumpstart and during other system deployments.
+Quick NIX Secure Script is used to **harden** and **secure** basic permissions and ownership **on the fly**.  This script can be used during boot up, cron, bootstrapping, kickstart, jumpstart and during other system deployments.
 
 Why use this?
 --------------
-Many times in (prod)uction world prior system admins harden without 
-automation or towards an industry baseline. This is to help get to a point
-of standardization and quickly set or reset basic system security.
+Many times in (prod)uction world prior admins harden without automation or towards an industry baseline. This is to help get to a point of standardization and quickly set or reset basic system security.
 
 Requirements
 ------------
