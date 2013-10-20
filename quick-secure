@@ -130,7 +130,7 @@ chmod -f 0444 /etc/motd /etc/issue*
 
 #### CRON SETUP
 if [[ -f /etc/cron.allow ]]; then
-   if [[ `grep root /etc/cron.allow` != "root" ]]; then
+   if [[ `grep root /etc/cron.allow 2>/dev/null` != "root" ]]; then
       echo "root" > /etc/cron.allow
       rm -f /etc/at.deny
    else
@@ -153,11 +153,11 @@ else
    echo ""
 fi
 
-if [[ `cat /etc/at.deny` = "" ]]; then
+if [[ `cat /etc/at.deny 2>/dev/null` = "" ]]; then
    rm -f /etc/at.deny
 fi
 
-if [[ `cat /etc/cron.deny` = "" ]]; then
+if [[ `cat /etc/cron.deny 2>/dev/null` = "" ]]; then
    rm -f /etc/cron.deny
 fi
 
