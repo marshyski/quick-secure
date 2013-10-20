@@ -105,6 +105,19 @@ echo "Audit group is set to '$AUDIT'"
 echo ""
 
 
+#### TURN OFF SELINUX
+if [[ `getenforce 2>/dev/null` = "Enforcing" ]]; then
+   setenforce 0
+fi
+   
+if [[ -f /etc/sysconfig/selinux ]]; then
+   sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+   echo "SELINUX=disabled" > /etc/sysconfig/selinux
+   echo "SELINUXTYPE=targeted" >> /etc/sysconfig/selinux
+   chmod -f 0640 /etc/sysconfig/selinux
+fi
+
+
 #### SETUP /etc/motd AND /etc/issues
 echo "" > /etc/motd
 echo "" > /etc/issue.net
@@ -319,6 +332,8 @@ chmod -f o-w /selinux/*
 umask 077 /etc/*
 chmod -f 0755 /etc
 chmod -f 0644 /usr/share/man/man1/*
+chmod -Rf 0644 /usr/share/man/man5
+chmod -Rf 0644 /usr/share/man/man1
 chmod -f 0600 /etc/yum.repos.d/*
 chmod -f 0640 /etc/fstab
 
@@ -403,13 +418,8 @@ chmod -f 0755 /usr/bin/sh
 chmod -f 1777 /var/mail
 chmod -f 1777 /var/spool/uucppublic
 
-
-#### SELINUX CONFIG
-if [[ -f /etc/sysconfig/selinux ]]; then
-   echo "SELINUX=disabled" > /etc/sysconfig/selinux
-   echo "SELINUXTYPE=targeted" >> /etc/sysconfig/selinux
-   chmod -f 0640 /etc/sysconfig/selinux
-fi
+#### SET ALL FILES IN .SSH TO 0600
+chmod -Rf 0600 `find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.ssh$'`
 
 
 #### DISABLE CTRL-ALT-DELETE RHEL 6+
@@ -426,7 +436,6 @@ if [[ -f /etc/inittab ]]; then
 	  sed -i 's/^ca::/#ca::/g' /etc/inittab
    fi
 fi
-
 
 #### REMOVE SECURITY RELATED PACKAGES
 if [[ -f /bin/rpm ]]; then
