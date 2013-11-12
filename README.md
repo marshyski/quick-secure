@@ -19,6 +19,8 @@ Installation
     git clone https://github.com/marshyski/quick-secure.git
     chmod 0700 ./quick-secure/quick-secure
 
+    curl -sfO https://raw.github.com/marshyski/quick-secure/master/quick-secure; chmod -f 0700 quick-secure
+
 Usage
 -----
   * **-c** argument reviews what's commented out in quick-secure
