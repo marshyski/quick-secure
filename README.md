@@ -40,4 +40,4 @@ Help & Feedback
 ---------------
 You can email (timski@linux.com) me directly if you need help, submit an issue or pull request.  Fork it.
 
-Looking for better hardening for Ubuntu so pull request quick-secure.
+**Looking for better hardening for Ubuntu so pull request quick-secure.**
