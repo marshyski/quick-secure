@@ -1,59 +1,59 @@
 #!/bin/bash
 #
-# Copyright 2013, Timothy Marcinowski (marshyski@gmail.com), USA
-# Web site: https://github.com/marshyski/quick_secure
+# Copyright 2014, Timothy Marcinowski (marshyski@gmail.com), USA
+# Web site: https://github.com/marshyski/quick-secure
 #
-# Quick NIX Secure Script comes with ABSOLUTELY NO WARRANTY. This is free 
-# software, and you are welcome to redistribute it under the terms of the 
+# Quick NIX Secure Script comes with ABSOLUTELY NO WARRANTY. This is free
+# software, and you are welcome to redistribute it under the terms of the
 # GNU General Public License. See LICENSE file for usage of this software.
 #
 ################################################################################
 #
 # Quick NIX Secure Script is meant to quickly secure UNIX/Linux systems
-# Version 1.0 | 18-MAY-2013 | GNU GENERAL PUBLIC LICENSE Version 3
+# GNU GENERAL PUBLIC LICENSE Version 3
 #
 ################################################################################
-#                                                   
+#
 # Review script's comments "#" if you want to apply any other best practices
-# to your system, uncomment.  Want to better this or recommend fixes? Submit 
-# a pull request or email POC above.                               
-#                                             
+# to your system, uncomment.  Want to better this or recommend fixes? Submit
+# a pull request or email PoC above.
+#
 #################################################################################
 
-#### CHECK IF ROOT IS RUNNING QUICK NIX SECURE SCRIPT
-if [[ $UID != 0 ]]; then
-   echo "Sorry, must sudo or be root to run this.  Exiting..."
-   exit
+#Check if script is running with root permissions
+if [[ $UID != "0" ]]; then
+  echo "Sorry, must sudo or be root to run this.  Exiting..."
+  exit
 fi
 
 
-#### DISPLAY COMMENTED OUT ITEMS AND VARIABLES FOR REVIEW
+#Display commented out items and variables for review
 if [[ $1 = "-c" ]]; then
-   echo ""
-   echo "==VARIABLES OF QUICK NIX SECURE SCRIPT=="
-   cat $0 | grep ^[A-Z]
-   echo ""
-   echo "==COMMENTED OUT SECTION OF SCRIPT=="
-   grep ^#[a-z] $0
-   exit
+  echo ""
+  echo "==VARIABLES OF QUICK NIX SECURE SCRIPT=="
+  cat $0 | grep ^[A-Z]
+  echo ""
+  echo "==COMMENTED OUT SECTION OF SCRIPT=="
+  grep ^#[Aa-Zz] $0
+  exit
 fi
 
 if [[ $1 = "-u" ]]; then
-   echo ""
-   cat $0 | sed 's/^[ \t]*//;s/[ \t]*$//' | grep '.' | grep -v ^#
-   exit
+  echo ""
+  cat $0 | sed 's/^[ \t]*//;s/[ \t]*$//' | grep '.' | grep -v ^#
+  exit
 fi
 
 
-#### SET VARIABLES OF SCRIPT
+#Set variables of script
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/kerberos/sbin:/usr/kerberos/bin"
-PASS_EXP="60" #used to set password expire in days 
+PASS_EXP="60" #used to set password expire in days
 PASS_WARN="14" #used to set password warning in days
 PASS_CHANG="1" #used to set how often you can change password in days
 
 
-#### DISCLAIMER
-echo "Quick NIX Secure Script Copyright (C) 2013 Timothy Marcinowski"
+#Disclaimer
+echo "Quick NIX Secure Script Copyright (C) 2014 Timothy Marcinowski"
 echo ""
 echo "# QUICK NIX SECURE SCRIPT HAS NO WARRANTY OF ANY KIND       #"
 echo "# PLEASE REVIEW SCRIPT BEFORE SECURING YOUR SYSTEM(S)       #"
@@ -67,58 +67,60 @@ echo "# THIS WILL BREAK RHEL/CENTOS 6 GNOME GUI!!!                #"
 echo ""
 
 
-#### VERIFY ADMIN WANTS TO HARDEN SYSTEM
+#Verify admin wants to harden system
 if [[ $1 != "-f" ]]; then
-   echo -n "Are you sure you want to quick secure `hostname` (Y/n)? "
-   read ANSWER
-   while true; do
-      if [[ "$ANSWER" != "Y" ]]; then
-         if [[ "$ANSWER" != "n" ]]; then
-            echo "'$ANSWER' invaild input"
-            echo -n "Are you sure you want to quick secure `hostname` (Y/n)? "
-            read ANSWER
-         fi
+  echo -n "Are you sure you want to quick secure `hostname` (y/N)? "
+  read ANSWER
+  while true; do
+    if [[ $ANSWER != "y" ]]; then
+      if [[ $ANSWER != "n" ]]; then
+        if [[ $ANSWER != "" ]]; then
+          echo "'$ANSWER' invaild input"
+          echo -n "Are you sure you want to quick secure `hostname` (y/N)? "
+          read ANSWER
+        fi
       fi
-      
-      if [[ $ANSWER = "n" ]]; then
-         echo ""
-         echo "Exiting..."
-         exit
-      fi
-      
-      if [[ $ANSWER = "Y" ]]; then
-         break
-      fi
-   done
-   echo ""
+    fi
+
+    if [[ $ANSWER = "n" ]] || [[ $ANSWER = "" ]]; then
+      echo ""
+      exit
+    fi
+
+    if [[ $ANSWER = "y" ]]; then
+      break
+    fi
+
+  done
+  echo ""
 fi
 
 
-#### SET AUDIT GROUP VARIABLE
+#Set audit group variable
 if [[ `grep -i ^audit /etc/group` != "" ]]; then
-   AUDIT=`grep -i ^audit /etc/group | awk -F":" '{ print $1 }' | head -n 1`
+  AUDIT=`grep -i ^audit /etc/group | awk -F":" '{ print $1 }' | head -n 1`
 else
-   AUDIT="root"
+  AUDIT="root"
 fi
 
 echo "Audit group is set to '$AUDIT'"
 echo ""
 
 
-#### TURN OFF SELINUX
+#Turn off selinux before setting configurations
 if [[ `getenforce 2>/dev/null` = "Enforcing" ]]; then
-   setenforce 0
+  setenforce 0
 fi
-   
+
 if [[ -f /etc/sysconfig/selinux ]]; then
-   sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
-   echo "SELINUX=disabled" > /etc/sysconfig/selinux
-   echo "SELINUXTYPE=targeted" >> /etc/sysconfig/selinux
-   chmod -f 0640 /etc/sysconfig/selinux
+  sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+  echo "SELINUX=disabled" > /etc/sysconfig/selinux
+  echo "SELINUXTYPE=targeted" >> /etc/sysconfig/selinux
+  chmod -f 0640 /etc/sysconfig/selinux
 fi
 
 
-#### SETUP /etc/motd AND /etc/issues
+#Setup /etc/motd and /etc/issues
 echo "" > /etc/motd
 echo "" > /etc/issue.net
 #rm -f /etc/issue /etc/issue.net
@@ -128,37 +130,37 @@ chown -f root:root /etc/motd /etc/issue*
 chmod -f 0444 /etc/motd /etc/issue*
 
 
-#### CRON SETUP
+#Cron setup
 if [[ -f /etc/cron.allow ]]; then
-   if [[ `grep root /etc/cron.allow 2>/dev/null` != "root" ]]; then
-      echo "root" > /etc/cron.allow
-      rm -f /etc/at.deny
-   else
-      echo "root is already in /etc/cron.allow"
-      echo ""
-   fi
+  if [[ `grep root /etc/cron.allow 2>/dev/null` != "root" ]]; then
+    echo "root" > /etc/cron.allow
+    rm -f /etc/at.deny
+  else
+    echo "root is already in /etc/cron.allow"
+    echo ""
+  fi
 fi
 
 if [[ -f /etc/cron.allow ]]; then
-   if [[ ! -f /etc/at.allow ]]; then
-      touch /etc/at.allow
-   fi
+  if [[ ! -f /etc/at.allow ]]; then
+    touch /etc/at.allow
+  fi
 fi
 
 if [[ `grep root /etc/at.allow 2>/dev/null` != "root" ]]; then
-   echo "root" > /etc/at.allow
-   rm -f /etc/at.deny
+  echo "root" > /etc/at.allow
+  rm -f /etc/at.deny
 else
-   echo "root is already in /etc/at.allow"
-   echo ""
+  echo "root is already in /etc/at.allow"
+  echo ""
 fi
 
 if [[ `cat /etc/at.deny 2>/dev/null` = "" ]]; then
-   rm -f /etc/at.deny
+  rm -f /etc/at.deny
 fi
 
 if [[ `cat /etc/cron.deny 2>/dev/null` = "" ]]; then
-   rm -f /etc/cron.deny
+  rm -f /etc/cron.deny
 fi
 
 
@@ -183,7 +185,7 @@ chmod -f 0600 /var/spool/at/*
 chmod -f 0400 /etc/anacrontab
 
 
-#### TEMP DIRECTORIES
+#Temp directories
 chmod -f 1777 /tmp
 
 #if [[ -d /var/tmp ]]; then
@@ -201,7 +203,7 @@ chmod -f 1777 /tmp
 #fi
 
 
-#### FILE PERMISSIONS AND OWNERSHIPS
+#File permissions and ownerships
 chown -f root:root /var/crash
 chown -f root:root /var/cache/mod_proxy
 chown -f root:root /var/lib/dav
@@ -283,7 +285,7 @@ chown -f root:$AUDIT /var/log
 chown -Rf root:$AUDIT /var/log/*
 chmod -Rf 0640 /var/log/*
 chmod -Rf 0640 /var/log/audit/*
-chmod -f 0755 /var/log 
+chmod -f 0755 /var/log
 chmod -f 0750 /var/log/syslog /var/log/audit
 chmod -f 0600 /var/log/lastlog*
 chmod -f 0600 /var/log/cron*
@@ -305,10 +307,10 @@ chown -f root /etc/xinetd.d/*
 chmod -f 0750 /etc/xinetd.d
 chmod -f 0640 /etc/xinetd.d/*
 chmod -f 0640 /etc/selinux/config
-chmod -f 0750 /usr/bin/chfn 
-chmod -f 0750 /usr/bin/chsh 
-chmod -f 0750 /usr/bin/write 
-chmod -f 0750 /sbin/mount.nfs 
+chmod -f 0750 /usr/bin/chfn
+chmod -f 0750 /usr/bin/chsh
+chmod -f 0750 /usr/bin/write
+chmod -f 0750 /sbin/mount.nfs
 chmod -f 0750 /sbin/mount.nfs4
 chmod -f 0700 /usr/bin/ldd #0400 FOR SOME SYSTEMS
 chmod -f 0700 /bin/traceroute
@@ -317,7 +319,7 @@ chmod -f 0700 /usr/bin/traceroute6*
 chown -f root:root /usr/bin/traceroute6
 chmod -f 0700 /bin/tcptraceroute
 chmod -f 0700 /sbin/iptunnel
-chmod -f 0700 /usr/bin/tracpath*	
+chmod -f 0700 /usr/bin/tracpath*
 chmod -f 0644 /dev/audio
 chown -f root:root /dev/audio
 chmod -f 0644 /etc/environment
@@ -337,32 +339,33 @@ chmod -Rf 0644 /usr/share/man/man1
 chmod -f 0600 /etc/yum.repos.d/*
 chmod -f 0640 /etc/fstab
 
-#### CLAMAV SECURITY
+
+#ClamAV permissions and ownership
 if [[ -d /usr/local/share/clamav ]]; then
-   passwd -l clamav 2>/dev/null
-   usermod -s /sbin/nologin clamav 2>/dev/null
-   chmod -f 0755 /usr/local/share/clamav
-   chown -f root:clamav /usr/local/share/clamav
-   chown -f root:clamav /usr/local/share/clamav/*.cvd
-   chmod -f 0664 /usr/local/share/clamav/*.cvd
-   mkdir -p /var/log/clamav
-   chown -f root:$AUDIT /var/log/clamav
-   chmod -f 0640 /var/log/clamav
+  passwd -l clamav 2>/dev/null
+  usermod -s /sbin/nologin clamav 2>/dev/null
+  chmod -f 0755 /usr/local/share/clamav
+  chown -f root:clamav /usr/local/share/clamav
+  chown -f root:clamav /usr/local/share/clamav/*.cvd
+  chmod -f 0664 /usr/local/share/clamav/*.cvd
+  mkdir -p /var/log/clamav
+  chown -f root:$AUDIT /var/log/clamav
+  chmod -f 0640 /var/log/clamav
 fi
 if [[ -d /var/clamav ]]; then
-   passwd -l clamav 2>/dev/null
-   usermod -s /sbin/nologin clamav 2>/dev/null
-   chmod -f 0755 /var/clamav
-   chown -f root:clamav /var/clamav
-   chown -f root:clamav /var/clamav/*.cvd
-   chmod -f 0664 /var/clamav/*.cvd
-   mkdir -p /var/log/clamav
-   chown -f root:$AUDIT /var/log/clamav
-   chmod -f 0640 /var/log/clamav
+  passwd -l clamav 2>/dev/null
+  usermod -s /sbin/nologin clamav 2>/dev/null
+  chmod -f 0755 /var/clamav
+  chown -f root:clamav /var/clamav
+  chown -f root:clamav /var/clamav/*.cvd
+  chmod -f 0664 /var/clamav/*.cvd
+  mkdir -p /var/log/clamav
+  chown -f root:$AUDIT /var/log/clamav
+  chmod -f 0640 /var/log/clamav
 fi
 
 
-#### DISA STIG FILE OWNERSHIP
+#DISA STIG file ownsership
 chmod -f 0755 /bin/csh
 chmod -f 0755 /bin/jsh
 chmod -f 0755 /bin/ksh
@@ -418,140 +421,142 @@ chmod -f 0755 /usr/bin/sh
 chmod -f 1777 /var/mail
 chmod -f 1777 /var/spool/uucppublic
 
-#### SET ALL FILES IN .SSH TO 0600
+
+#Set all files in ``.ssh`` to ``0600``
 chmod -Rf 0600 `find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.ssh$'`
 
 
-#### DISABLE CTRL-ALT-DELETE RHEL 6+
+#Disable ctrl-alt-delete RHEL 6+
 if [[ -f /etc/init/control-alt-delete.conf ]]; then
-   if [[ `grep ^exec /etc/init/control-alt-delete.conf` != "" ]]; then
-	  sed -i 's/^exec/#exec/g' /etc/init/control-alt-delete.conf
-   fi
+  if [[ `grep ^exec /etc/init/control-alt-delete.conf` != "" ]]; then
+    sed -i 's/^exec/#exec/g' /etc/init/control-alt-delete.conf
+  fi
 fi
 
 
-#### DISABLE CTRL-ALT-DELETE RHEL 5
+#Disable ctrl-alt-delete RHEL 5+
 if [[ -f /etc/inittab ]]; then
-   if [[ `grep ^ca:: /etc/inittab` != "" ]]; then
-	  sed -i 's/^ca::/#ca::/g' /etc/inittab
-   fi
+  if [[ `grep ^ca:: /etc/inittab` != "" ]]; then
+    sed -i 's/^ca::/#ca::/g' /etc/inittab
+  fi
 fi
 
-#### REMOVE SECURITY RELATED PACKAGES
+
+#Remove security related packages
 if [[ -f /bin/rpm ]]; then
-   rpm -ev nc 2>/dev/null
-   rpm -ev vsftpd 2>/dev/null
-   rpm -ev ftp 2>/dev/null
-   rpm -ev nmap 2>/dev/null
-   rpm -ev telnet-server 2>/dev/null
-   rpm -ev telnet 2>/dev/null
-   rpm -ev rdate 2>/dev/null
-   rpm -ev ntpdate 2>/dev/null
-   rpm -ev tcpdump 2>/dev/null
-   rpm -ev vnc-server 2>/dev/null
-   rpm -ev tigervnc-server 2>/dev/null
-   rpm -ev wireshark 2>/dev/null
-   rpm -ev --allmatches --nodeps wireless-tools 2>/dev/null
+  rpm -ev nc 2>/dev/null
+  rpm -ev vsftpd 2>/dev/null
+  rpm -ev ftp 2>/dev/null
+  rpm -ev nmap 2>/dev/null
+  rpm -ev telnet-server 2>/dev/null
+  rpm -ev telnet 2>/dev/null
+  rpm -ev rdate 2>/dev/null
+  rpm -ev ntpdate 2>/dev/null
+  rpm -ev tcpdump 2>/dev/null
+  rpm -ev vnc-server 2>/dev/null
+  rpm -ev tigervnc-server 2>/dev/null
+  rpm -ev wireshark 2>/dev/null
+  rpm -ev --allmatches --nodeps wireless-tools 2>/dev/null
 fi
 
 if [[ `which apt-get 2>/dev/null` != "" ]]; then
-   apt-get autoremove -y netcat-openbsd 2>/dev/null
-   apt-get autoremove -y vsftpd 2>/dev/null
-   apt-get autoremove -y ftp 2>/dev/null
-   apt-get autoremove -y nmap 2>/dev/null
-   apt-get autoremove -y telnetd 2>/dev/null
-   apt-get autoremove -y telnet 2>/dev/null
-   apt-get autoremove -y rdate 2>/dev/null
-   apt-get autoremove -y ntpdate 2>/dev/null
-   apt-get autoremove -y tcpdump 2>/dev/null
-   apt-get autoremove -y vnc4server 2>/dev/null
-   apt-get autoremove -y vino 2>/dev/null
-   apt-get autoremove -y wireshark 2>/dev/null
+  apt-get autoremove -y netcat-openbsd 2>/dev/null
+  apt-get autoremove -y vsftpd 2>/dev/null
+  apt-get autoremove -y ftp 2>/dev/null
+  apt-get autoremove -y nmap 2>/dev/null
+  apt-get autoremove -y telnetd 2>/dev/null
+  apt-get autoremove -y telnet 2>/dev/null
+  apt-get autoremove -y rdate 2>/dev/null
+  apt-get autoremove -y ntpdate 2>/dev/null
+  apt-get autoremove -y tcpdump 2>/dev/null
+  apt-get autoremove -y vnc4server 2>/dev/null
+  apt-get autoremove -y vino 2>/dev/null
+  apt-get autoremove -y wireshark 2>/dev/null
 fi
 
 
-#### ACCOUNT MANAGEMENT / CLEANUP
+#Account management and cleanup
 if [[ `which userdel 2>/dev/null` != "" ]]; then
-   userdel -f games 2>/dev/null
-   userdel -f news 2>/dev/null
-   userdel -f gopher 2>/dev/null
-   userdel -f tcpdump 2>/dev/null
-   userdel -f shutdown 2>/dev/null
-   userdel -f halt 2>/dev/null
-#   userdel -f nobody 2>/dev/null 
-#   userdel -f nfsnobody 2>/dev/null
-   userdel -f sync 2>/dev/null
-   userdel -f ftp 2>/dev/null
-   userdel -f operator 2>/dev/null
-   userdel -f lp 2>/dev/null
-   userdel -f uucp 2>/dev/null
-   userdel -f irc 2>/dev/null
-   userdel -f gnats 2>/dev/null
-   userdel -f pcap 2>/dev/null
-   userdel -f netdump 2>/dev/null 
+  userdel -f games 2>/dev/null
+  userdel -f news 2>/dev/null
+  userdel -f gopher 2>/dev/null
+  userdel -f tcpdump 2>/dev/null
+  userdel -f shutdown 2>/dev/null
+  userdel -f halt 2>/dev/null
+  #   userdel -f nobody 2>/dev/null
+  #   userdel -f nfsnobody 2>/dev/null
+  userdel -f sync 2>/dev/null
+  userdel -f ftp 2>/dev/null
+  userdel -f operator 2>/dev/null
+  userdel -f lp 2>/dev/null
+  userdel -f uucp 2>/dev/null
+  userdel -f irc 2>/dev/null
+  userdel -f gnats 2>/dev/null
+  userdel -f pcap 2>/dev/null
+  userdel -f netdump 2>/dev/null
 fi
 
 
-#### GDM RHEL5 COMES UNLOCKED
+#GDM user RHEL 5 is unlocked out-of-the-box
 passwd -l gdm 2>/dev/null
 
 
-#### SET PASSWORD SETTINGS FOR ALL ACCOUNTS IN SHADOW
-sed -i 's/0:99999:7/'"$PASS_CHANG:$PASS_EXP:$PASS_WARN"'/' /etc/shadow
+#Set password settings for all accounts in shadow
+#sed -i 's/0:99999:7/'"$PASS_CHANG:$PASS_EXP:$PASS_WARN"'/' /etc/shadow
 
 
-#### DISABLE FINGERPRINT IN PAM / AUTHCONFIG
+#Disable fingerprint in PAM and authconfig
 if [[ `which authconfig 2>/dev/null` != "" ]]; then
-   authconfig --disablefingerprint --update
+  authconfig --disablefingerprint --update
 fi
 
 
-#### START-UP CHKCONFIG LEVELS SET
+#Start-up chkconfig levels set
 if [[ -f /sbin/chkconfig ]]; then
-   /sbin/chkconfig --level 12345 auditd on 2>/dev/null
-#  /sbin/chkconfig yum-updatesd off 2>/dev/null
-   /sbin/chkconfig isdn off 2>/dev/null
-   /sbin/chkconfig bluetooth off 2>/dev/null
-   /sbin/chkconfig haldaemon off 2>/dev/null #NEEDED ON FOR RHEL6 GUI
+  /sbin/chkconfig --level 12345 auditd on 2>/dev/null
+  #  /sbin/chkconfig yum-updatesd off 2>/dev/null
+  /sbin/chkconfig isdn off 2>/dev/null
+  /sbin/chkconfig bluetooth off 2>/dev/null
+  /sbin/chkconfig haldaemon off 2>/dev/null #NEEDED ON FOR RHEL6 GUI
 fi
 
 
-#### CHANGE MOUNT POINT SECURITY TO NODEV, NOEXEC, NOSUID ONLY TESTED ON RHEL
-## /boot
+#Change mount point security to nodev, noexec, nosuid (only tested on RHEL)
+#/boot
 #sed -i "s/\( \/boot.*`grep " \/boot " /etc/fstab | awk '{print $4}'`\)/\1,nodev,noexec,nosuid/" /etc/fstab
 
-## /dev/shm
+#/dev/shm
 #sed -i "s/\( \/dev\/shm.*`grep " \/dev\/shm " /etc/fstab | awk '{print $4}'`\)/\1,nodev,noexec,nosuid/" /etc/fstab
 
-## /var
+#/var
 #sed -i "s/\( \/var\/log.*`grep " \/var " /etc/fstab | awk '{print $4}'`\)/\1,nodev,noexec,nosuid/" /etc/fstab
 
-## /var/log
+#/var/log
 #sed -i "s/\( \/var\/log.*`grep " \/var\/log " /etc/fstab | awk '{print $4}'`\)/\1,nodev,noexec,nosuid/" /etc/fstab
 
-## /tmp
+#/tmp
 #sed -i "s/\( \/tmp.*`grep " \/tmp " /etc/fstab | awk '{print $4}'`\)/\1,nodev,noexec,nosuid/" /etc/fstab
 
-## /home
+#/home
 #sed -i "s/\( \/home.*`grep " \/home " /etc/fstab | awk '{print $4}'`\)/\1,nodev,nosuid/" /etc/fstab
 
 
-#### MISC SETTINGS / PERMISSIONS
-chown -Rf root:users /usr/local/src/*
+#Misc settings and permissions
 chmod -Rf o-w /usr/local/src/*
 rm -f /etc/security/console.perms
 
-#### REMOVE RPMNEW / RPMSAVE
-rm -f /etc/audit/audit*old
+
+#Remove rpmnew and rpmsave files
 if [[ `which rpm 2>/dev/null` != "" ]]; then
-   find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.rpmsave'
-   find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.rpmnew'
+  find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.rpmsave'
+  find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.rpmnew'
 fi
 
-#### SET BACKGROUND IMAGE PERMISSIONS
+
+#Set background image permissions
 if [[ -d /usr/share/backgrounds ]]; then
-   chmod -f 0444 /usr/share/backgrounds/default*
-   chmod -f 0444 /usr/share/backgrounds/images/default*
+  chmod -f 0444 /usr/share/backgrounds/default*
+  chmod -f 0444 /usr/share/backgrounds/images/default*
 fi
 
 

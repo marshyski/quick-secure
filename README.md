@@ -10,13 +10,16 @@ Use before or after app deploymentz.  I don't set umasks, so everything should w
 
 Requirements
 ------------
-  * RHEL 5-6, Fedora 17-19, Ubuntu 10-13, Solaris 9-10 and OpenSolaris
+  * RHEL 5-6, Fedora 17-20, Ubuntu 10-13, Solaris 9-10 and OpenSolaris
   * root or equivalent
   * basic /bin /sbin /usr/bin executables
 
 Installation
 ------------
-    curl -sfO https://raw.github.com/marshyski/quick-secure/master/quick-secure; chmod 0700 quick-secure
+    (Easiest method to get going)
+    curl -sfO https://raw.github.com/marshyski/quick-secure/master/quick-secure && sh quick-secure
+    
+    (Alternative)  
     git clone https://github.com/marshyski/quick-secure.git
     chmod 0700 ./quick-secure/quick-secure
 
@@ -36,3 +39,5 @@ Usage
 Help & Feedback
 ---------------
 You can email (timski@linux.com) me directly if you need help, submit an issue or pull request.  Fork it.
+
+Looking for better hardening for Ubuntu so pull request quick-secure.
