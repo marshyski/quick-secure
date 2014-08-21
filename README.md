@@ -17,18 +17,22 @@ Requirements
 Installation
 ------------
 (Easiest method to get going)
+
 ``curl -sfO https://raw.githubusercontent.com/marshyski/quick-secure/master/quick-secure && bash quick-secure``
     
 (Alternative)  
+
 ``git clone https://github.com/marshyski/quick-secure.git
 chmod 0700 ./quick-secure/quick-secure``
 
 Securing Docker Containers
 ------------
 (Easiest method)
+
 ``RUN cd / && curl -sfO https://raw.githubusercontent.com/marshyski/quick-secure/master/quick-secure && bash /quick-secure -f``
 
 (Alternative method) 
+
 ``ADD quick-secure /quick-secure
 RUN bash /quick-secure -f``
 
