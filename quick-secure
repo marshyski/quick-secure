@@ -50,6 +50,7 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/local/bi
 PASS_EXP="60" #used to set password expire in days
 PASS_WARN="14" #used to set password warning in days
 PASS_CHANG="1" #used to set how often you can change password in days
+SELINUX=`grep ^SELINUX= /etc/selinux/config 2>/dev/null | awk -F'=' '{ print $2 }'`
 
 
 #Disclaimer
@@ -60,9 +61,9 @@ Quick NIX Secure Script Copyright (C) 2014 Timothy Marcinowski
 # PLEASE REVIEW SCRIPT BEFORE SECURING YOUR SYSTEM(S)       #
 # PLEASE USE WITH CAUTION AND DILIGENCE!!!                  #
 
-  quick-secure  -c | Review what's commented out in script
-  quick-secure  -u | Review what's being applied to system
-  quick-secure  -f | Force settings, never prompt question
+  quick-secure -c | Review what's commented out in script
+  quick-secure -u | Review what's being applied to system
+  quick-secure -f | Force settings, never prompt question
 
 # THIS WILL BREAK RHEL/CENTOS 6 GNOME GUI!!!                #
 DISC
@@ -523,6 +524,9 @@ if [[ -d /usr/share/backgrounds ]]; then
   chmod -f 0444 /usr/share/backgrounds/images/default*
 fi
 
+if [[ $SELINUX = enforcing || $SELINUX = permissive ]]; then
+  setenforce 1
+fi
 
 echo ""
 echo "WARNING!WARNING!WARNING!"
