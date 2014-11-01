@@ -22,7 +22,7 @@
 
 #Check if script is running with root permissions
 if [[ $UID != "0" ]]; then
-  echo "Sorry, must sudo or be root to run this.  Exiting..."
+  echo "Sorry, must sudo or be root to run this."
   exit
 fi
 
@@ -46,52 +46,41 @@ fi
 
 
 #Set variables of script
-PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/kerberos/sbin:/usr/kerberos/bin"
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/local/bin:/opt/local/sbin"
 PASS_EXP="60" #used to set password expire in days
 PASS_WARN="14" #used to set password warning in days
 PASS_CHANG="1" #used to set how often you can change password in days
 
 
 #Disclaimer
-echo "Quick NIX Secure Script Copyright (C) 2014 Timothy Marcinowski"
-echo ""
-echo "# QUICK NIX SECURE SCRIPT HAS NO WARRANTY OF ANY KIND       #"
-echo "# PLEASE REVIEW SCRIPT BEFORE SECURING YOUR SYSTEM(S)       #"
-echo "# PLEASE USE WITH CAUTION AND DILIGENCE!!!                  #"
-echo ""
-echo "  quick_secure.sh -c | Review what's commented out in script"
-echo "  quick_secure.sh -u | Review what's being applied to system"
-echo "  quick_secure.sh -f | Force settings, never prompt question"
-echo ""
-echo "# THIS WILL BREAK RHEL/CENTOS 6 GNOME GUI!!!                #"
-echo ""
+cat << 'DISC'
+Quick NIX Secure Script Copyright (C) 2014 Timothy Marcinowski
 
+# QUICK NIX SECURE SCRIPT HAS NO WARRANTY OF ANY KIND       #
+# PLEASE REVIEW SCRIPT BEFORE SECURING YOUR SYSTEM(S)       #
+# PLEASE USE WITH CAUTION AND DILIGENCE!!!                  #
+
+  quick-secure  -c | Review what's commented out in script
+  quick-secure  -u | Review what's being applied to system
+  quick-secure  -f | Force settings, never prompt question
+
+# THIS WILL BREAK RHEL/CENTOS 6 GNOME GUI!!!                #
+DISC
 
 #Verify admin wants to harden system
 if [[ $1 != "-f" ]]; then
   echo -n "Are you sure you want to quick secure `hostname` (y/N)? "
   read ANSWER
-  while true; do
-    if [[ $ANSWER != "y" ]]; then
-      if [[ $ANSWER != "n" ]]; then
-        if [[ $ANSWER != "" ]]; then
-          echo "'$ANSWER' invaild input"
-          echo -n "Are you sure you want to quick secure `hostname` (y/N)? "
-          read ANSWER
-        fi
-      fi
-    fi
+  if [[ $ANSWER != "y" ]]; then
+    echo ""
+    exit
+  fi
 
-    if [[ $ANSWER = "n" ]] || [[ $ANSWER = "" ]]; then
-      echo ""
-      exit
-    fi
+  if [[ $ANSWER = "n" ]] || [[ $ANSWER = "" ]]; then
+    echo ""
+    exit
+  fi
 
-    if [[ $ANSWER = "y" ]]; then
-      break
-    fi
-
-  done
   echo ""
 fi
 
@@ -185,25 +174,8 @@ chmod -f 0600 /var/spool/at/*
 chmod -f 0400 /etc/anacrontab
 
 
-#Temp directories
-chmod -f 1777 /tmp
-
-#if [[ -d /var/tmp ]]; then
-#   rm -Rf /var/tmp
-#   ln -s /tmp /var/tmp
-#else
-#    ln -s /tmp /var/tmp
-#fi
-
-#if [[ -d /usr/tmp ]]; then
-#   rm -Rf /usr/tmp
-#   ln -s /tmp /usr/tmp
-#else
-#    ln -s /tmp /usr/tmp
-#fi
-
-
 #File permissions and ownerships
+chmod -f 1777 /tmp
 chown -f root:root /var/crash
 chown -f root:root /var/cache/mod_proxy
 chown -f root:root /var/lib/dav
@@ -446,12 +418,9 @@ fi
 if [[ -f /bin/rpm ]]; then
   rpm -ev nc 2>/dev/null
   rpm -ev vsftpd 2>/dev/null
-  rpm -ev ftp 2>/dev/null
   rpm -ev nmap 2>/dev/null
   rpm -ev telnet-server 2>/dev/null
-  rpm -ev telnet 2>/dev/null
   rpm -ev rdate 2>/dev/null
-  rpm -ev ntpdate 2>/dev/null
   rpm -ev tcpdump 2>/dev/null
   rpm -ev vnc-server 2>/dev/null
   rpm -ev tigervnc-server 2>/dev/null
@@ -462,12 +431,9 @@ fi
 if [[ `which apt-get 2>/dev/null` != "" ]]; then
   apt-get autoremove -y netcat-openbsd 2>/dev/null
   apt-get autoremove -y vsftpd 2>/dev/null
-  apt-get autoremove -y ftp 2>/dev/null
   apt-get autoremove -y nmap 2>/dev/null
   apt-get autoremove -y telnetd 2>/dev/null
-  apt-get autoremove -y telnet 2>/dev/null
   apt-get autoremove -y rdate 2>/dev/null
-  apt-get autoremove -y ntpdate 2>/dev/null
   apt-get autoremove -y tcpdump 2>/dev/null
   apt-get autoremove -y vnc4server 2>/dev/null
   apt-get autoremove -y vino 2>/dev/null
@@ -483,8 +449,6 @@ if [[ `which userdel 2>/dev/null` != "" ]]; then
   userdel -f tcpdump 2>/dev/null
   userdel -f shutdown 2>/dev/null
   userdel -f halt 2>/dev/null
-  #   userdel -f nobody 2>/dev/null
-  #   userdel -f nfsnobody 2>/dev/null
   userdel -f sync 2>/dev/null
   userdel -f ftp 2>/dev/null
   userdel -f operator 2>/dev/null
