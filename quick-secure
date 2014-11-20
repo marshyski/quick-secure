@@ -395,8 +395,8 @@ chmod -f 1777 /var/mail
 chmod -f 1777 /var/spool/uucppublic
 
 
-#Set all files in ``.ssh`` to ``0600``
-chmod -Rf 0600 `find / -noleaf 2>/dev/null | grep -v '/net\|/proc' | grep '\.ssh$'`
+#Set all files in ``.ssh`` to ``600``
+chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
 
 #Disable ctrl-alt-delete RHEL 6+
