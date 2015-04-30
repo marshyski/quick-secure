@@ -540,8 +540,6 @@ if [[ -f ${sshConfig?} ]]; then
   fi  
 fi
 
-
-
 echo ""
 echo "WARNING!WARNING!WARNING!"
 echo "CHANGE ROOT'S PASSWORD AFTER RUNNING QUICK NIX SECURE SCRIPT, JUST IN CASE."
