@@ -534,9 +534,9 @@ sshConfig='/etc/ssh/ssh_config'
 
 if [[ -f ${sshConfig?} ]]; then
   if grep -q ${rootLogin?} ${sshConfig?}; then
-    sed -i 's/.*PermitRootLogin.*/\tPermitRootLogin yes/g' ${sshConfig?}
+    sed -i 's/.*PermitRootLogin.*/\tPermitRootLogin no/g' ${sshConfig?}
   else
-    echo -e '\tPermitRootLogin yes' >> ${sshConfig?}
+    echo -e '\tPermitRootLogin no' >> ${sshConfig?}
   fi  
 fi
 
