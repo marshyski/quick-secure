@@ -528,6 +528,18 @@ if [[ $SELINUX = enforcing || $SELINUX = permissive ]]; then
   setenforce 1
 fi
 
+#Permit ssh login from root
+rootLogin='PermitRootLogin'
+sshConfig='/etc/ssh/ssh_config'
+
+if [[ -f ${sshConfig?} ]]; then
+  if grep -q ${rootLogin?} ${sshConfig?}; then
+    sed -i 's/.*PermitRootLogin.*/\tPermitRootLogin no/g' ${sshConfig?}
+  else
+    echo -e '\tPermitRootLogin no' >> ${sshConfig?}
+  fi  
+fi
+
 echo ""
 echo "WARNING!WARNING!WARNING!"
 echo "CHANGE ROOT'S PASSWORD AFTER RUNNING QUICK NIX SECURE SCRIPT, JUST IN CASE."
