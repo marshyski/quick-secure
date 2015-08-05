@@ -311,6 +311,13 @@ chmod -Rf 0644 /usr/share/man/man5
 chmod -Rf 0644 /usr/share/man/man1
 chmod -f 0600 /etc/yum.repos.d/*
 chmod -f 0640 /etc/fstab
+chmod -f 0755 /var/cache/man
+chmod -f 0755 /etc/init.d/atd
+chmod -f 0750 /etc/ppp/peers
+chmod -f 0755 /bin/ntfs-3g
+chmod -f 0750 /usr/sbin/pppd
+chmod -f 0750 /etc/chatscripts
+chmod -f 0750 /usr/local/share/ca-certificates
 
 
 #ClamAV permissions and ownership
@@ -438,6 +445,8 @@ if [[ `which apt-get 2>/dev/null` != "" ]]; then
   apt-get autoremove -y vnc4server 2>/dev/null
   apt-get autoremove -y vino 2>/dev/null
   apt-get autoremove -y wireshark 2>/dev/null
+  apt-get autoremove -y bind9-host 2>/dev/null
+  apt-get autoremove -y libbind9-90 2>/dev/null
 fi
 
 
@@ -536,7 +545,42 @@ if [[ -f ${sshConfig?} ]]; then
     sed -i 's/.*PermitRootLogin.*/\tPermitRootLogin no/g' ${sshConfig?}
   else
     echo -e '\tPermitRootLogin no' >> ${sshConfig?}
-  fi  
+  fi
+fi
+
+#Set home directories to 0700 permissions
+if [[ -d /home ]]; then
+  for x in `find /home -maxdepth 1 -mindepth 1 -type d`; do chmod -f 0700 $x; done
+fi
+
+if [[ -d /export/home ]]; then
+  for x in `find /export/home -maxdepth 1 -mindepth 1 -type d`; do chmod -f 0700 $x; done
+fi
+
+#Set basic kernel parameters
+if [[ `which sysctl 2>/dev/null` != "" ]]; then
+  #Turn on Exec Shield for RHEL systems
+  sysctl -w kernel.exec-shield=0 2>/dev/null
+  #Turn on ASLR conservative randomization
+  sysctl -w kernel.randomize_va_space=1
+  #Enable TCP SYN Cookie Protection
+  sysctl -w net.ipv4.tcp_syncookies=1
+  #Disable IP Source Routing
+  sysctl -w net.ipv4.conf.all.accept_source_route=0
+  #Disable ICMP Redirect Acceptance
+  sysctl -w net.ipv4.conf.all.accept_redirects=0
+  #Enable IP Spoofing Protection
+  sysctl -w net.ipv4.conf.all.rp_filter=1
+  #Enable Ignoring to ICMP Requests
+  sysctl -w net.ipv4.icmp_echo_ignore_all=1
+  #Enable Ignoring Broadcasts Request
+  sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1
+  #Enable Bad Error Message Protection
+  sysctl -w net.ipv4.icmp_ignore_bogus_error_responses=1
+  #Enable Logging of Spoofed Packets, Source Routed Packets, Redirect Packets
+  sysctl -w net.ipv4.conf.all.log_martians=1
+  sysctl -w net.ipv4.conf.default.log_martians=1
+  sysctl -p
 fi
 
 echo ""
