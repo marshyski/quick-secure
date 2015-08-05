@@ -44,16 +44,23 @@ Securing Docker Containers
 
 Usage
 -----
-  * **-c** argument reviews what's commented out in quick-secure.
-  ``./quick-secure/quick-secure -c``
-  * **-u** argument reviews what's being applied to your current system.
-  ``./quick-secure/quick-secure -u``
-  * **-f** argument forces settings without being prompt with "are you sure"
-    question.
-  ``./quick-secure/quick-secure -f``
-  * Run quick-secure for the first time: ``./quick-secure/quick-secure`` in CLI.
-  * Setup quick-secure to run every sunday at 11PM via root's cron: 
-    ``00 23 * * 0 /root/quick-secure/quick-secure -f``
+  **-c** argument reviews what's commented out in quick-secure.
+
+    ./quick-secure/quick-secure -c
+
+  **-u** argument reviews what's being applied to your current system.
+  
+    ./quick-secure/quick-secure -u
+    
+  **-f** argument forces settings without being prompt with "are you sure" question.
+  
+    ./quick-secure/quick-secure -f
+    
+  Run quick-secure for the first time: ``./quick-secure/quick-secure`` in CLI.
+  
+  Setup quick-secure to run every sunday at 11PM via root's cron: 
+  
+    00 23 * * 0 /root/quick-secure/quick-secure -f
 
 
 Help & Feedback
