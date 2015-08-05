@@ -560,7 +560,7 @@ fi
 #Set basic kernel parameters
 if [[ `which sysctl 2>/dev/null` != "" ]]; then
   #Turn on Exec Shield for RHEL systems
-  sysctl -w kernel.exec-shield=0 2>/dev/null
+  sysctl -w kernel.exec-shield=1 2>/dev/null
   #Turn on ASLR conservative randomization
   sysctl -w kernel.randomize_va_space=1
   #Enable TCP SYN Cookie Protection
