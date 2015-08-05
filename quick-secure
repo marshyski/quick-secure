@@ -430,7 +430,6 @@ if [[ -f /bin/rpm ]]; then
 fi
 
 if [[ `which apt-get 2>/dev/null` != "" ]]; then
-  apt-get autoremove -y netcat-openbsd 2>/dev/null
   apt-get autoremove -y vsftpd 2>/dev/null
   apt-get autoremove -y nmap 2>/dev/null
   apt-get autoremove -y telnetd 2>/dev/null
